@@ -54,7 +54,7 @@ class A2CAgent:
 
         return ep_rewards
 
-    def test_model(self, network, episodes):
+    def test_model(self, env, network, episodes):
         self.model.network = load_model(network, custom_objects={'logits_loss':self.logits_loss, 'valuefn_loss':self.valuefn_loss})
         episode_rewards=[]
         for episode in range(episodes):
@@ -69,6 +69,7 @@ class A2CAgent:
                 episode_rewards[-1]+=reward
                 if done:
                     episode_rewards.append(0.0)
+                    print("Episode Rewards: "+str(episode_rewards[-2]))
         plt.style.use('seaborn')
         plt.plot(np.arange(0, len(episode_rewards), 10), episode_rewards[::10])
         plt.xlabel('Episode')
@@ -119,7 +120,7 @@ if __name__ == '__main__':
 
   rewards_history = agent.train(env, 64, 1000)
   print("Finished training. Testing...")
-  agent.test_model('models/model999.h5', 100)
+  agent.test_model(env, 'models/model999.h5', 100)
 
   plt.style.use('seaborn')
   plt.plot(np.arange(0, len(rewards_history), 10), rewards_history[::10])
